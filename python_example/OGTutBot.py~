@@ -29,15 +29,6 @@ class TutorialBot(BaseAgent):
         self.should_dodge = False
         self.on_second_jump = False
         self.next_dodge_time = 0
-    
-    #A function to find full boost pickups
-    #Returns the coordinates of the closest boost as a tuple, and the distance to it 
-    def closest_full_boost(self):
-        distances = []
-        for i in full_boost_coords:
-            distances.append(hypot((i[0] - self.bot_pos.x), (i[1] - self.bot_pos.y)))
-        return(full_boost_coords[distances.index(min(distances))], min(disances))
-
 
     def aim(self, target_x, target_y):
         angle_between_bot_and_target = math.atan2(target_y - self.bot_pos.y,
