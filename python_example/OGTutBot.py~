@@ -89,12 +89,12 @@ class TutorialBot(BaseAgent):
         # - Orange is behind the ball if the ball's Y axis is smaller than orange's Y axis
         self.controller.throttle = 1
        
-        #If low on boost, and one is nearby, go grab it
+        #If low on boost, and one if nearby, go grab it
         closest_boost_coords, distance_to_boost = self.closest_full_boost()
         boost_x, boost_y, _ = closest_boost_coords
         boost = packet.game_cars[self.index].boost
-        #self.logger.info(boost)
-        if ((boost < 20) and (distance_to_boost < 1000)):
+        self.logger.info(boost)
+        if ((boost < 10) and (distance_to_boost < 2000)):
             self.aim(boost_x, boost_y)
         #self.logger.info(self.closest_full_boost()[1])
 
