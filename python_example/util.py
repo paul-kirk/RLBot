@@ -99,16 +99,16 @@ def aim(agent, target_x, target_y):
 
     agent.controller.handbrake = abs(math.degrees(angle_front_to_target)) < powerslide_angle
 
-def be_at_spot(agent, x, y, game_time, arrival_time):
+def be_at_spot(agent, x, y, arrival_time, controller):
     distance = math.hypot((agent.car.location.data[0] - x), (agent.car.location.data[1] - y))
-    time_remaining = arrival_time - game_time
+    time_remaining = arrival_time - agent.game.game_info.seconds_elapsed
     speed = math.hypot(agent.car.velocity.data[0], agent.car.velocity.data[1])
     aim(agent, x, y)
 
     if speed > distance/time:
-        agent.controller.throttle = 0
+        controller.throttle = 0
     else:
-        agent.controller.throttle = 1
+        controller.throttle = 1
 
 def ball_touching_own_goal_line(agent, x, y):
     if (x < -GOAL_WIDTH/2) or (x > GOAL_WIDTH/2):

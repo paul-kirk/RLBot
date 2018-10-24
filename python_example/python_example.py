@@ -14,21 +14,21 @@ class PythonExample(BaseAgent):
         self.ball = GameObject()
         self.start = time.time()
 
-        self.state = TameState()
+        self.state = TenderState()
         self.controller = shot_controller
 
     def get_output(self, game: GameTickPacket) -> SimpleControllerState:
         self.preprocess(game)
+        self.game = game
         bp = self.get_ball_prediction_struct()
 
         ball_path = self.get_ball_prediction_struct() #next 6 seconds of ball's path
-        print('--------------')
+        # print('--------------')
         # print(ball_path.slices[1].physics.location.x)
         # print(ball_path.slices[1].game_seconds)
         # print(game.game_info.seconds_elapsed)
-        print(ball_touching_own_goal_line(self, self.ball.location.data[0], self.ball.location.data[1]))
-        print('--------------')
-
+        # print(ball_touching_own_goal_line(self, self.ball.location.data[0], self.ball.location.data[1]))
+        # print('--------------')
         return self.state.execute(self)
 
     def preprocess(self, game):
