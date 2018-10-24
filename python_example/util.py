@@ -1,8 +1,8 @@
 import math
-
+import time
 GOAL_WIDTH = 1900
 FIELD_LENGTH = 10280
-FEILD_WIDTH = 8240
+FIELD_WIDTH = 8240
 
 class Vector3D:
     def __init__(self, data):
@@ -73,3 +73,49 @@ def angle2D(obj1, obj2):
 def distance2D(obj1, obj2):
     difference = toLocation(obj1) - toLocation(obj2)
     return math.sqrt(difference.data[0]**2 + difference.data[1]**2)
+
+def aim(agent, target_x, target_y):
+    powerslide_angle = math.radians(170)
+    angle_between_bot_and_target = math.atan2(target_y - agent.bot_pos.y,
+                                            target_x - agent.bot_pos.x)
+
+    angle_front_to_target = angle_between_bot_and_target - agent.bot_yaw
+
+    # Correct the values
+    if angle_front_to_target < -math.pi:
+        angle_front_to_target += 2 * math.pi
+    if angle_front_to_target > math.pi:
+        angle_front_to_target -= 2 * math.pi
+
+    if angle_front_to_target < math.radians(-10):
+        # If the target is more than 10 degrees right from the centre, steer left
+        agent.controller.steer = -1
+    elif angle_front_to_target > math.radians(10):
+        # If the target is more than 10 degrees left from the centre, steer right
+        agent.controller.steer = 1
+    else:
+        # If the target is less than 10 degrees from the centre, steer straight
+        agent.controller.steer = 0
+
+    agent.controller.handbrake = abs(math.degrees(angle_front_to_target)) < powerslide_angle
+
+def be_at_spot(agent, x, y, game_time, arrival_time):
+    distance = math.hypot((agent.car.location.data[0] - x), (agent.car.location.data[1] - y))
+    time_remaining = arrival_time - game_time
+    speed = math.hypot(agent.car.velocity.data[0], agent.car.velocity.data[1])
+    aim(agent, x, y)
+
+    if speed > distance/time:
+        agent.controller.throttle = 0
+    else:
+        agent.controller.throttle = 1
+
+def ball_touching_own_goal_line(agent, x, y):
+    if (x < -GOAL_WIDTH/2) or (x > GOAL_WIDTH/2):
+        return False
+    elif agent.team == 0 and y > -FIELD_LENGTH/2:
+        return False
+    elif agent.team == 1 and y < FIELD_LENGTH/2:
+        return False
+    else:
+        return True
