@@ -74,12 +74,50 @@ def distance2D(obj1, obj2):
     difference = toLocation(obj1) - toLocation(obj2)
     return math.sqrt(difference.data[0]**2 + difference.data[1]**2)
 
-def aim(agent, target_x, target_y):
-    powerslide_angle = math.radians(170)
-    angle_between_bot_and_target = math.atan2(target_y - agent.bot_pos.y,
-                                            target_x - agent.bot_pos.x)
+# def aim(agent, target_x, target_y):
+#     powerslide_angle = math.radians(170)
+#     angle_between_bot_and_target = math.atan2(target_y - agent.bot_pos.y,
+#                                             target_x - agent.bot_pos.x)
+#
+#     angle_front_to_target = angle_between_bot_and_target - agent.bot_yaw
+#
+#     # Correct the values
+#     if angle_front_to_target < -math.pi:
+#         angle_front_to_target += 2 * math.pi
+#     if angle_front_to_target > math.pi:
+#         angle_front_to_target -= 2 * math.pi
+#
+#     if angle_front_to_target < math.radians(-10):
+#         # If the target is more than 10 degrees right from the centre, steer left
+#         agent.controller.steer = -1
+#     elif angle_front_to_target > math.radians(10):
+#         # If the target is more than 10 degrees left from the centre, steer right
+#         agent.controller.steer = 1
+#     else:
+#         # If the target is less than 10 degrees from the centre, steer straight
+#         agent.controller.steer = 0
+#
+#     agent.controller.handbrake = abs(math.degrees(angle_front_to_target)) < powerslide_angle
+#
+# def be_at_spot(agent, x, y, arrival_time, controller):
+#     distance = math.hypot((agent.car.location.data[0] - x), (agent.car.location.data[1] - y))
+#     time_remaining = arrival_time - agent.game.game_info.seconds_elapsed
+#     speed = math.hypot(agent.car.velocity.data[0], agent.car.velocity.data[1])
+#     aim(agent, x, y)
+#
+#     if speed > distance/time:
+#         controller.throttle = 0
+#     else:
+#         controller.throttle = 1
 
-    angle_front_to_target = angle_between_bot_and_target - agent.bot_yaw
+
+def aim(agent, target_x, target_y, controller):
+    # print('aim')
+    powerslide_angle = math.radians(170)
+    angle_between_bot_and_target = math.atan2(target_y - agent.car.location.data[1],
+                                            target_x - agent.car.location.data[0])
+
+    angle_front_to_target = angle_between_bot_and_target - agent.car.rotation.data[1]
 
     # Correct the values
     if angle_front_to_target < -math.pi:
@@ -89,26 +127,40 @@ def aim(agent, target_x, target_y):
 
     if angle_front_to_target < math.radians(-10):
         # If the target is more than 10 degrees right from the centre, steer left
-        agent.controller.steer = -1
+        controller.steer = -1
     elif angle_front_to_target > math.radians(10):
         # If the target is more than 10 degrees left from the centre, steer right
-        agent.controller.steer = 1
+        controller.steer = 1
     else:
         # If the target is less than 10 degrees from the centre, steer straight
-        agent.controller.steer = 0
+        controller.steer = 0
 
-    agent.controller.handbrake = abs(math.degrees(angle_front_to_target)) < powerslide_angle
+    controller.handbrake = abs(math.degrees(angle_front_to_target)) < powerslide_angle
 
-def be_at_spot(agent, x, y, arrival_time, controller):
+def be_at_spot_on_time(agent, x, y, arrival_time, controller):
     distance = math.hypot((agent.car.location.data[0] - x), (agent.car.location.data[1] - y))
     time_remaining = arrival_time - agent.game.game_info.seconds_elapsed
     speed = math.hypot(agent.car.velocity.data[0], agent.car.velocity.data[1])
-    aim(agent, x, y)
+    aim(agent, x, y, controller)
 
     if speed > distance/time:
-        controller.throttle = 0
+        controller.throttle = -1
     else:
         controller.throttle = 1
+
+def go_to_spot(agent, x, y, controller):
+    x_match = abs(x - agent.car.location.data[0]) < 150
+    y_match = abs(y - agent.car.location.data[1]) < 150
+    # print(x_match)
+    if x_match and y_match:
+        print('stopping')
+        controller.throttle = 0
+    else:
+        aim(agent, x, y, controller)
+        controller.throttle = 1
+
+def face_direction(agent, x, y, controller):
+    return True
 
 def ball_touching_own_goal_line(agent, x, y):
     if (x < -GOAL_WIDTH/2) or (x > GOAL_WIDTH/2):
