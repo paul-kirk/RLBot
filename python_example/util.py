@@ -149,15 +149,17 @@ def be_at_spot_on_time(agent, x, y, arrival_time, controller):
         controller.throttle = 1
 
 def go_to_spot(agent, x, y, controller):
-    x_match = abs(x - agent.car.location.data[0]) < 150
-    y_match = abs(y - agent.car.location.data[1]) < 150
-    # print(x_match)
-    if x_match and y_match:
-        print('stopping')
+    x_match = abs(x - agent.car.location.data[0]) < 80
+    y_match = abs(y - agent.car.location.data[1]) < 80
+    net_vel = math.hypot(agent.car.velocity.data[0], agent.car.velocity.data[1])
+    local_spot = toLocal([x, y, 0], agent.car)
+    if x_match and y_match and net_vel < 500:
         controller.throttle = 0
-    else:
+    elif local_spot.data[0] > 0:
         aim(agent, x, y, controller)
         controller.throttle = 1
+    elif local_spot.data[0] < 0:
+        controller.throttle = -1
 
 def face_direction(agent, x, y, controller):
     return True
