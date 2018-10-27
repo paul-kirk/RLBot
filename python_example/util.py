@@ -161,9 +161,13 @@ def go_to_spot(agent, x, y, controller):
     elif local_spot.data[0] < 0:
         controller.throttle = -1
 
-def face_direction(agent, x, y, controller):
-    return True
-
+def face_direction_of(agent, x, y, controller):
+    local_spot = toLocal([x, y, 0], agent.car)
+    angle_to_target = math.atan2(local_spot.data[1], local_spot.data[0])
+    if angle_to_target > 0.1 or angle_to_target < -0.1:
+        controller.jump = True
+        aim(agent, x, y, controller)
+        
 def ball_touching_own_goal_line(agent, x, y):
     if (x < -GOAL_WIDTH/2) or (x > GOAL_WIDTH/2):
         return False
