@@ -187,8 +187,6 @@ def face_direction_of(agent, x, y, controller):
             print(agent.car.location.data[2])
         else:
             controller.jump = 0
-    else:
-        print('facing')
 
 def go_to_and_face(agent, stop_x, stop_y, face_x, face_y, controller):
     x_match = abs(stop_x - agent.car.location.data[0]) < 80
