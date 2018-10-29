@@ -152,7 +152,7 @@ def tender_controller(agent):
     ball_path = agent.get_ball_prediction_struct()
 
     # go_to_and_face(agent, 0, 0, 0, agent.team*FIELD_LENGTH, controller_state)
-    face_direction_of(agent, FIELD_WIDTH, 0, controller_state)
+    face_direction_of(agent, 0, FIELD_WIDTH, controller_state)
 
     # for i in ball_path.slices:
     #     if ball_touching_own_goal_line(agent, i.physics.location.x, i.physics.location.y):

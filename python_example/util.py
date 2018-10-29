@@ -136,6 +136,8 @@ def aim(agent, target_x, target_y, controller):
         controller.steer = 0
 
     controller.handbrake = abs(math.degrees(angle_front_to_target)) < powerslide_angle
+def is_grounded(agent):
+    return agent.game.game_cars[agent.index].has_wheel_contact
 
 def be_at_spot_on_time(agent, x, y, arrival_time, controller):
     distance = math.hypot((agent.car.location.data[0] - x), (agent.car.location.data[1] - y))
@@ -165,8 +167,10 @@ def face_direction_of(agent, x, y, controller):
     local_spot = toLocal([x, y, 0], agent.car)
     angle_to_target = math.atan2(local_spot.data[1], local_spot.data[0])
     if angle_to_target > 0.05 or angle_to_target < -0.05:
-        controller.jump = 1
-        aim(agent, x, y, controller)
+        print(is_grounded(agent))
+        controller.throttle = 0
+        # aim(agent, x, y, controller)
+        controller.jump = 0
 
 def go_to_and_face(agent, stop_x, stop_y, face_x, face_y, controller):
     x_match = abs(stop_x - agent.car.location.data[0]) < 80
