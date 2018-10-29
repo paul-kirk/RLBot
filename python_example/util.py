@@ -184,7 +184,6 @@ def face_direction_of(agent, x, y, controller):
         airborne_aim(agent, x, y, controller)
         if is_grounded(agent):
             controller.jump = 1
-            print(agent.car.location.data[2])
         else:
             controller.jump = 0
 

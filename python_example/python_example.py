@@ -23,7 +23,7 @@ class PythonExample(BaseAgent):
         bp = self.get_ball_prediction_struct()
 
         ball_path = self.get_ball_prediction_struct() #next 6 seconds of ball's path
-        # print('--------------')
+        # printa('--------------')
         # print(ball_path.slices[1].physics.location.x)
         # print(ball_path.slices[1].game_seconds)
         # print(game.game_info.seconds_elapsed)
