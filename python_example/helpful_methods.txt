@@ -1,0 +1,15 @@
+aim(agent, x, y, controller) - aim's car toward a spot on the ground. Doesn't actually drive the car.
+
+is_grounded(agent) - tells if car has ground contact
+
+is_facing_target(agent, x, y) - returns boolean stating whether angle between car and target is between certain values.
+
+go_to_spot(agent, x, y, controller) - car will drive to the spot on the ground
+
+airborne_aim(agent, x, y, controller) - car points nose at target while in the air (only 2D)
+
+face_direction_of(agent, x, y, controller) car doesn't change location (2D)
+
+go_to_and_face(agent, stop_x, stop_y, face_x, face_y, controller) - car will go to a location and face a direction
+
+be_at_spot_on_time(acent, x, y, time, controller) - car is at the spot at a specific time
