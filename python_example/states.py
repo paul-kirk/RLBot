@@ -152,12 +152,13 @@ def tender_controller(agent):
     # current_speed = velocity2D(agent.car)
     ball_path = agent.get_ball_prediction_struct()
     on_goal = None
+
     for i in ball_path.slices:
         if ball_touching_own_goal_line(agent, i.physics.location.x, i.physics.location.y):
-            on_goal = [i.physics.location.x, i.physics.location.y]
+            on_goal = [i.physics.location.x, i.physics.location.y, i.game_seconds]
             break
     if on_goal:
-        go_to_spot(agent, on_goal[0], on_goal[1], controller_state)
+        be_at_spot_on_time(agent, on_goal[0], on_goal[1], on_goal[2], controller_state)
     else:
         go_to_and_face(agent, -GOAL_WIDTH/2 + 240, sign(agent.team)*FIELD_LENGTH/2, GOAL_WIDTH/2, sign(agent.team)*FIELD_LENGTH/2, controller_state)
 

@@ -104,13 +104,10 @@ def aim(agent, target_x, target_y, controller):
 def is_grounded(agent):
     return agent.game.game_cars[agent.index].has_wheel_contact
 
-def ground_speed(agent):
-    return math.hypot(agent.car.velocity.data[0], agent.car.velocity.data[1])
-
 def is_facing_target(agent, x, y):
     local_spot = toLocal([x, y, 0], agent.car)
     angle_to_target = math.atan2(local_spot.data[1], local_spot.data[0])
-    return angle_to_target < 0.1 and angle_to_target > -0.1
+    return angle_to_target < 0.2 and angle_to_target > -0.2
 
 def be_at_spot_on_time(agent, x, y, arrival_time, controller):
     distance = math.hypot((agent.car.location.data[0] - x), (agent.car.location.data[1] - y))
@@ -118,7 +115,7 @@ def be_at_spot_on_time(agent, x, y, arrival_time, controller):
     speed = math.hypot(agent.car.velocity.data[0], agent.car.velocity.data[1])
     aim(agent, x, y, controller)
 
-    if speed > distance/time:
+    if speed > distance/time_remaining:
         controller.throttle = -1
     else:
         controller.throttle = 1
@@ -148,7 +145,6 @@ def airborne_aim(agent, x, y, controller):
 
 def face_direction_of(agent, x, y, controller):
     if is_facing_target(agent, x, y) == False:
-        # aim(agent, x, y, controller)
         airborne_aim(agent, x, y, controller)
         if is_grounded(agent):
             controller.jump = 1
@@ -164,7 +160,9 @@ def go_to_and_face(agent, stop_x, stop_y, face_x, face_y, controller):
     else:
         go_to_spot(agent, stop_x, stop_y, controller)
 
-# def time_to_target(agent, x, y, controller):
+def time_to_target(agent, x, y, controller):
+    distance = distance2D(agent.car, [x, y, 0])
+
 
 def ball_touching_own_goal_line(agent, x, y):
     if (x < -GOAL_WIDTH/2) or (x > GOAL_WIDTH/2):
