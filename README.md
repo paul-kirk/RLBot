@@ -1,25 +1,20 @@
-# RLBotPythonExample
-Example of a python bot using the RLBot framework
+# Rocket League Bot
 
-## Installation
+## Description
 
-### Video guide
+A build of the AI bot in the popular game Rocket League.
 
-https://www.youtube.com/watch?v=UjsQFNN0nSA
+## Features
 
-### Plain instructions
-
-1. Make sure you've installed [Python 3.6 64 bit](https://www.python.org/ftp/python/3.6.5/python-3.6.5-amd64.exe). During installation:
-   - Select "Add Python to PATH"
-   - Make sure pip is included in the installation
-2. Open Rocket League
-3. Download or clone this repository
-3. In the files from the previous step, find and double click on run-gui.bat
-4. Click the 'Run' button
-
-## Changing the bot
-
-- Bot behavior is controlled by `python_example/python_example.py`
-- Bot appearance is controlled by `python_example/appearance.cfg`
-
-See https://github.com/RLBot/RLBotPythonExample/wiki for documentation and tutorials.
+```
+on_goal = None
+  for i in ball_path.slices:
+      if ball_touching_own_goal_line(agent, i.physics.location.x, i.physics.location.y):
+          on_goal = [i.physics.location.x, i.physics.location.y]
+          break
+  if on_goal:
+      go_to_spot(agent, on_goal[0], on_goal[1], controller_state)
+  else:
+      go_to_and_face(agent, -GOAL_WIDTH/2 + 240, sign(agent.team)*FIELD_LENGTH/2, GOAL_WIDTH/2, sign(agent.team)*FIELD_LENGTH/2, controller_state)
+  ```
+This snippet controls part of the goal tender. If the ball is on goal, the car will move to stop the ball. Otherwise, the car will position itself for optimal goal coverage should a shot be placed on goal.
