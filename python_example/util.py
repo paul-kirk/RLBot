@@ -104,6 +104,19 @@ def aim(agent, target_x, target_y, controller):
 def is_grounded(agent):
     return agent.game.game_cars[agent.index].has_wheel_contact
 
+
+
+# def has_technique(agent):
+#     unless this is a game value, we'll have to take the
+#     time since is_grounded(agent) was true.
+
+# def technique_at_ball(agent, ball_x, ball_y, controller):
+    #change arrive at ball on time to arrive a tad earlier than the ball to technique.
+
+def local_angle_to_target(agent, x, y):
+    location = toLocal([x, y, 0], agent.car)
+    return math.atan2(location.data[1], location.data[0])
+
 def is_facing_target(agent, x, y):
     local_spot = toLocal([x, y, 0], agent.car)
     angle_to_target = math.atan2(local_spot.data[1], local_spot.data[0])

@@ -2,7 +2,7 @@
 
 ## Description
 
-A build of the AI bot in the popular game Rocket League.
+A build of the AI bot in the popular game Rocket League coded in Python.
 
 ## Features
 
